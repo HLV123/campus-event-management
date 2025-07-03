@@ -264,12 +264,6 @@ search_results_YYYYMMDD_HHMMSS.csv
 3. **Permission Error**: Kiểm tra phân quyền user
 4. **Date Format**: Sử dụng YYYY-MM-DD
 
-### Debug mode
-```python
-# Trong main.py
-system.validate_system_data()  # Kiểm tra tính toàn vẹn
-system.show_system_architecture()  # Hiển thị kiến trúc
-```
 
 ## 🔄 Updates và phiên bản
 
@@ -306,17 +300,6 @@ system.show_system_architecture()  # Hiển thị kiến trúc
 ## 📄 License
 
 MIT License - xem file LICENSE để biết thêm chi tiết
-
-## 👥 Authors
-
-- **Main Developer**: [Your Name]
-- **Contributors**: [List contributors]
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/campus-event-management/issues)
-- **Documentation**: [Wiki](https://github.com/yourusername/campus-event-management/wiki)
-- **Email**: your.email@example.com
 
 ## 🎉 Acknowledgments
 
