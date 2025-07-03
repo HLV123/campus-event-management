@@ -1,0 +1,129 @@
+flowchart TD
+    subgraph "🏗️ EVENT CREATION PROCESS"
+        EC1[👑 Admin Access Required] --> EC2[📝 Input Event Details]
+        EC2 --> EC3{✅ Validate Input}
+        EC3 -->|❌ Name < 5 chars| EC4[⚠️ Error: Name too short]
+        EC3 -->|❌ Past Date| EC5[⚠️ Error: Date in past]
+        EC3 -->|❌ Capacity ≤ 0| EC6[⚠️ Error: Invalid capacity]
+        EC4 --> EC2
+        EC5 --> EC2
+        EC6 --> EC2
+        EC3 -->|✅ Valid| EC7[🎯 Generate Event ID]
+        EC7 --> EC8[📅 Create Event Object]
+        EC8 --> EC9[💾 Store in System]
+        EC9 --> EC10[🎉 Success Notification]
+        EC10 --> EC11[🔄 Return to Menu]
+    end
+    
+    subgraph "📝 REGISTRATION PROCESS"
+        R1[👤 Student/Visitor Access] --> R2[📋 Show Available Events]
+        R2 --> R3[🎯 User Selects Event]
+        R3 --> R4{✅ Check Conditions}
+        R4 -->|❌ Already Registered| R5[⚠️ Error: Duplicate registration]
+        R4 -->|❌ Event Full| R6[⚠️ Error: No capacity]
+        R4 -->|✅ Valid| R7[➕ Add to Attendees]
+        R5 --> R8[🔄 Return to Menu]
+        R6 --> R8
+        R7 --> R9[📊 Update Capacity Info]
+        R9 --> R10[🎉 Registration Success]
+        R10 --> R11[📋 Show Remaining Spots]
+        R11 --> R8
+    end
+    
+    subgraph "🔍 SEARCH PROCESS"
+        S1[🔍 Search Menu] --> S2{📂 Search Type}
+        S2 -->|1| S3[🏷️ Name Search]
+        S2 -->|2| S4[📍 Location Search]
+        S2 -->|3| S5[📅 Date Search]
+        S2 -->|4| S6[👤 Organizer Search]
+        S2 -->|5| S7[📊 Status Filter]
+        S2 -->|6| S8[🔍 Advanced Search]
+        
+        S3 --> S9[💭 Apply Name Filter]
+        S4 --> S10[💭 Apply Location Filter]
+        S5 --> S11[💭 Apply Date Filter]
+        S6 --> S12[💭 Apply Organizer Filter]
+        S7 --> S13[💭 Apply Status Filter]
+        S8 --> S14[💭 Apply Multiple Criteria]
+        
+        S9 --> S15[📋 Collect Results]
+        S10 --> S15
+        S11 --> S15
+        S12 --> S15
+        S13 --> S15
+        S14 --> S15
+        
+        S15 --> S16{❓ Results Found?}
+        S16 -->|❌ No| S17[⚠️ No Results Message]
+        S16 -->|✅ Yes| S18[📋 Display Results Table]
+        S17 --> S19[🔄 Return to Search]
+        S18 --> S20{🎯 User Action}
+        S20 -->|1| S21[👁️ View Details]
+        S20 -->|2| S22[📝 Register from Results]
+        S20 -->|3| S23[📤 Export Results]
+        S21 --> S20
+        S22 --> S20
+        S23 --> S20
+        S20 -->|0| S19
+    end
+    
+    subgraph "📊 STATISTICS & REPORTING"
+        ST1[👑 Admin Access] --> ST2[📈 Calculate Statistics]
+        ST2 --> ST3[📊 Total Events & Attendees]
+        ST3 --> ST4[🏆 Find Max/Min Attendance]
+        ST4 --> ST5[👥 Group by Role]
+        ST5 --> ST6[🎯 Group by Organizer]
+        ST6 --> ST7[📈 Calculate Fill Rates]
+        ST7 --> ST8[📋 Display Summary]
+        ST8 --> ST9{📤 Export Options}
+        ST9 -->|1| ST10[📄 Excel Format UTF-8-BOM]
+        ST9 -->|2| ST11[📄 WPS Format UTF-8]
+        ST9 -->|3| ST12[📄 Both Formats]
+        ST9 -->|4| ST13[📋 Detailed Attendee Report]
+        ST10 --> ST14[💾 Create CSV File]
+        ST11 --> ST14
+        ST12 --> ST14
+        ST13 --> ST14
+        ST14 --> ST15[✅ Export Success]
+        ST15 --> ST16[🔄 Return to Menu]
+    end
+    
+    subgraph "🗑️ EVENT DELETION PROCESS"
+        D1[👑 Admin Access Required] --> D2[📋 Show All Events]
+        D2 --> D3[🎯 Select Event to Delete]
+        D3 --> D4[⚖️ Analyze Deletion Impact]
+        D4 --> D5[📊 Count Affected Attendees]
+        D5 --> D6[⚠️ Show Impact Warnings]
+        D6 --> D7[📋 List Affected Users]
+        D7 --> D8{❓ First Confirmation}
+        D8 -->|❌ Cancel| D9[❌ Deletion Cancelled]
+        D8 -->|✅ YES| D10{❓ High Impact?}
+        D10 -->|✅ Yes| D11[⚠️ Type Event Name]
+        D10 -->|❌ No| D12[🗑️ Proceed with Deletion]
+        D11 --> D13{✅ Name Match?}
+        D13 -->|❌ No| D14[❌ Name Mismatch]
+        D13 -->|✅ Yes| D12
+        D14 --> D9
+        D12 --> D15[🔄 Remove Attendees]
+        D15 --> D16[🗑️ Delete Event]
+        D16 --> D17[💾 Auto-save Data]
+        D17 --> D18[✅ Deletion Complete]
+        D18 --> D19[📧 Suggest Notifications]
+        D19 --> D20[🔄 Return to Menu]
+        D9 --> D20
+    end
+    
+    %% Styling
+    classDef processStart fill:#00b894,stroke:#00a085,stroke-width:2px,color:#fff
+    classDef validation fill:#fdcb6e,stroke:#e17055,stroke-width:2px,color:#000
+    classDef error fill:#ff6b6b,stroke:#d63031,stroke-width:2px,color:#fff
+    classDef success fill:#55a3ff,stroke:#0984e3,stroke-width:2px,color:#fff
+    classDef decision fill:#a29bfe,stroke:#6c5ce7,stroke-width:2px,color:#fff
+    classDef action fill:#fd79a8,stroke:#e84393,stroke-width:2px,color:#fff
+    
+    class EC1,R1,S1,ST1,D1 processStart
+    class EC3,R4,S16,D8,D10,D13 decision
+    class EC4,EC5,EC6,R5,R6,S17,D9,D14 error
+    class EC10,R10,ST15,D18 success
+    class EC2,EC7,EC8,R7,S9,S10,S11,S12,S13,S14,ST2,ST3,ST4,ST5,ST6,ST7,D4,D5,D12,D15,D16 action
+    class EC3,R4,S2,S20,ST9,D8,D10,D11,D13 validation

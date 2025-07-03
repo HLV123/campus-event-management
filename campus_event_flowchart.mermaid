@@ -1,0 +1,164 @@
+flowchart TD
+    A[🚀 Khởi động Hệ thống] --> B[📊 Load Sample Data<br/>4 Events, 9 Users]
+    B --> C{🎭 Chọn Vai trò}
+    
+    C -->|1| D[👑 Admin]
+    C -->|2| E[🎯 Event Organizer]
+    C -->|3| F[🎓 Student]
+    C -->|4| G[👤 Visitor]
+    C -->|5| H[ℹ️ Xem thông tin hệ thống]
+    C -->|0| Z[👋 Thoát]
+    
+    %% Admin Flow
+    D --> D1{📋 Admin Menu}
+    D1 -->|1| D2[➕ Tạo sự kiện]
+    D1 -->|2| D3[✏️ Cập nhật sự kiện]
+    D1 -->|3| D4[🗑️ Xóa sự kiện]
+    D1 -->|4| D5[👁️ Xem tất cả sự kiện]
+    D1 -->|5| D6[👥 Xem tất cả người tham dự]
+    D1 -->|6| D7[📊 Thống kê và báo cáo]
+    D1 -->|7| D8[💾 Lưu dữ liệu]
+    D1 -->|0| C
+    
+    %% Admin Sub-flows
+    D2 --> D2a[📝 Nhập thông tin sự kiện]
+    D2a --> D2b{✅ Validation}
+    D2b -->|❌ Lỗi| D2c[⚠️ Hiển thị lỗi]
+    D2c --> D2a
+    D2b -->|✅ OK| D2d[🎉 Tạo thành công]
+    D2d --> D1
+    
+    D3 --> D3a[📋 Chọn sự kiện]
+    D3a --> D3b[🔧 Chọn field cập nhật]
+    D3b --> D3c{✅ Validation}
+    D3c -->|❌ Lỗi| D3d[⚠️ Hiển thị lỗi]
+    D3d --> D3b
+    D3c -->|✅ OK| D3e[🎉 Cập nhật thành công]
+    D3e --> D1
+    
+    D4 --> D4a[📋 Chọn sự kiện xóa]
+    D4a --> D4b[⚖️ Phân tích impact]
+    D4b --> D4c{⚠️ Xác nhận xóa}
+    D4c -->|❌ Hủy| D1
+    D4c -->|✅ Xác nhận| D4d[🗑️ Xóa thành công]
+    D4d --> D1
+    
+    D7 --> D7a[📈 Hiển thị thống kê]
+    D7a --> D7b{📁 Xuất báo cáo?}
+    D7b -->|1| D7c[📄 Excel Format]
+    D7b -->|2| D7d[📄 WPS Format]
+    D7b -->|3| D7e[📄 Cả hai format]
+    D7b -->|0| D1
+    D7c --> D1
+    D7d --> D1
+    D7e --> D1
+    
+    %% Event Organizer Flow
+    E --> E0[👤 Chọn Organizer]
+    E0 --> E1{📋 Organizer Menu}
+    E1 -->|1| E2[👁️ Xem sự kiện của tôi]
+    E1 -->|2| E3[⚙️ Quản lý đăng ký]
+    E1 -->|3| E4[👁️ Xem tất cả sự kiện]
+    E1 -->|4| E5[📊 Thống kê sự kiện của tôi]
+    E1 -->|0| C
+    
+    E3 --> E3a[📋 Chọn sự kiện quản lý]
+    E3a --> E3b[👥 Hiển thị danh sách đăng ký]
+    E3b --> E3c{🔧 Hành động}
+    E3c -->|1| E3d[📋 Xem chi tiết]
+    E3c -->|2| E3e[📤 Xuất danh sách]
+    E3c -->|3| E3f[📊 Thống kê đăng ký]
+    E3c -->|0| E1
+    E3d --> E3c
+    E3e --> E3c
+    E3f --> E3c
+    
+    %% Student Flow
+    F --> F0[👤 Chọn Student]
+    F0 --> F1{📋 Student Menu}
+    F1 -->|1| F2[👁️ Xem sự kiện]
+    F1 -->|2| F3[📝 Đăng ký sự kiện]
+    F1 -->|3| F4[📋 Xem sự kiện đã đăng ký]
+    F1 -->|4| F5[🔍 Tìm kiếm sự kiện]
+    F1 -->|0| C
+    
+    F3 --> F3a[📋 Hiển thị sự kiện có thể đăng ký]
+    F3a --> F3b[🎯 Chọn sự kiện]
+    F3b --> F3c{✅ Kiểm tra điều kiện}
+    F3c -->|❌ Đã đầy/Đã đăng ký| F3d[⚠️ Thông báo lỗi]
+    F3d --> F1
+    F3c -->|✅ OK| F3e[🎉 Đăng ký thành công]
+    F3e --> F1
+    
+    F5 --> F5a{🔍 Loại tìm kiếm}
+    F5a -->|1| F5b[🏷️ Tìm theo tên]
+    F5a -->|2| F5c[📍 Tìm theo địa điểm]
+    F5a -->|3| F5d[📅 Tìm theo ngày]
+    F5a -->|4| F5e[👤 Tìm theo organizer]
+    F5a -->|5| F5f[📊 Lọc theo trạng thái]
+    F5a -->|6| F5g[🔍 Tìm kiếm nâng cao]
+    F5a -->|0| F1
+    
+    F5b --> F5h[📋 Hiển thị kết quả]
+    F5c --> F5h
+    F5d --> F5h
+    F5e --> F5h
+    F5f --> F5h
+    F5g --> F5h
+    F5h --> F5i{🎯 Hành động với kết quả}
+    F5i -->|1| F5j[👁️ Xem chi tiết]
+    F5i -->|2| F5k[📝 Đăng ký từ kết quả]
+    F5i -->|3| F5l[📤 Xuất kết quả]
+    F5i -->|0| F1
+    F5j --> F5i
+    F5k --> F5i
+    F5l --> F5i
+    
+    %% Visitor Flow (tương tự Student)
+    G --> G0[👤 Chọn Visitor]
+    G0 --> G1{📋 Visitor Menu}
+    G1 -->|1| G2[👁️ Xem sự kiện]
+    G1 -->|2| G3[📝 Đăng ký sự kiện]
+    G1 -->|3| G4[📋 Xem sự kiện đã đăng ký]
+    G1 -->|4| G5[🔍 Tìm kiếm sự kiện]
+    G1 -->|0| C
+    
+    %% System Info
+    H --> H1[📊 Hiển thị thống kê hệ thống]
+    H1 --> H2[👥 Thống kê users theo role]
+    H2 --> H3[📅 Thống kê sự kiện]
+    H3 --> H4[📈 Thống kê đăng ký]
+    H4 --> H5[ℹ️ Tính năng hệ thống]
+    H5 --> C
+    
+    %% Data Operations (Background)
+    D8 --> S1[💾 Lưu Users CSV]
+    S1 --> S2[💾 Lưu Events CSV]
+    S2 --> S3[✅ Hoàn thành]
+    S3 --> D1
+    
+    %% Error Handling
+    D2c -.->|Retry| D2a
+    D3d -.->|Retry| D3b
+    F3d -.->|Back| F1
+    
+    %% Exit Flow
+    Z --> Z1[💾 Auto-save dữ liệu]
+    Z1 --> Z2[👋 Cảm ơn & Thoát]
+    
+    %% Styling
+    classDef adminStyle fill:#ff6b6b,stroke:#d63031,stroke-width:2px,color:#fff
+    classDef organizerStyle fill:#4ecdc4,stroke:#00b894,stroke-width:2px,color:#fff
+    classDef studentStyle fill:#45b7d1,stroke:#0984e3,stroke-width:2px,color:#fff
+    classDef visitorStyle fill:#96ceb4,stroke:#00b894,stroke-width:2px,color:#fff
+    classDef systemStyle fill:#feca57,stroke:#ff9f43,stroke-width:2px,color:#000
+    classDef dataStyle fill:#a29bfe,stroke:#6c5ce7,stroke-width:2px,color:#fff
+    classDef exitStyle fill:#fd79a8,stroke:#e84393,stroke-width:2px,color:#fff
+    
+    class D,D1,D2,D3,D4,D5,D6,D7,D8,D2a,D2b,D2c,D2d,D3a,D3b,D3c,D3d,D3e,D4a,D4b,D4c,D4d,D7a,D7b,D7c,D7d,D7e adminStyle
+    class E,E0,E1,E2,E3,E4,E5,E3a,E3b,E3c,E3d,E3e,E3f organizerStyle
+    class F,F0,F1,F2,F3,F4,F5,F3a,F3b,F3c,F3d,F3e,F5a,F5b,F5c,F5d,F5e,F5f,F5g,F5h,F5i,F5j,F5k,F5l studentStyle
+    class G,G0,G1,G2,G3,G4,G5 visitorStyle
+    class A,B,C,H,H1,H2,H3,H4,H5 systemStyle
+    class S1,S2,S3 dataStyle
+    class Z,Z1,Z2 exitStyle

@@ -1,0 +1,434 @@
+Bài Tập                "Xây Dựng Hệ Thống Quản Lý Sự Kiện Campus với Kiểm Soát Truy Cập Dựa Trên Vai Trò"
+
+Mục Tiêu
+Thiết kế và triển khai một Hệ Thống Quản Lý Sự Kiện Campus cho phép:
+Kiểm soát truy cập dựa trên vai trò để quản lý sự kiện.
+Đăng ký và theo dõi người tham dự (sinh viên, nhân viên, khách mời).
+Lập lịch sự kiện và quản lý sức chứa.
+Bài tập này sẽ tích hợp các kỹ năng lập trình Python nâng cao, bao gồm OOP, xử lý file và thiết kế ứng dụng thực tế.
+
+Tính Năng và Kết Quả Cần Nộp
+
+1. Vai Trò và Kiểm Soát Truy Cập
+Quản trị viên (Admin):
+Tạo, cập nhật và xóa sự kiện.
+Xem tất cả sự kiện và người tham dự.
+
+Người tổ chức sự kiện (Event Organizer):
+Quản lý đăng ký người tham dự cho sự kiện của họ.
+Xem chi tiết sự kiện.
+
+Sinh viên/Khách mời (Student/Visitor):
+Tìm kiếm sự kiện và đăng ký.
+Xem các sự kiện đã đăng ký.
+
+2. Chức Năng Cốt Lõi
+Quản Lý Sự Kiện:
+Thêm, cập nhật và xóa sự kiện.
+Theo dõi sức chứa sự kiện (ví dụ: số người tham dự tối đa).
+Xác thực đầu vào cho tên sự kiện, ngày và sức chứa.
+
+Đăng Ký Người Tham Dự:
+Đăng ký người tham dự cho sự kiện với kiểm tra sức chứa.
+Cung cấp thông báo xác nhận khi đăng ký thành công.
+Ngăn chặn đăng ký trùng lặp.
+
+Tính Toán:
+Tổng số người tham dự trên tất cả sự kiện.
+Sự kiện có lượng người tham dự cao nhất và thấp nhất.
+
+Lưu Trữ Dữ Liệu:
+Lưu dữ liệu sự kiện và người tham dự vào file (CSV hoặc JSON).
+Xuất báo cáo thống kê ra file (ví dụ: CSV) để dễ dàng chia sẻ.
+
+3. Yêu Cầu Nộp Bài
+Mã nguồn: Một triển khai Python hoàn chỉnh của Hệ Thống Quản Lý Sự Kiện.
+Tài liệu:  Cung cấp sơ đồ luồng để hiển thị tương tác của người dùng với hệ thống.
+Ảnh chụp màn hình: Minh họa tương tác cho từng vai trò người dùng.
+
+Tiêu Chí Đánh Giá
+Chức Năng và Phạm Vi (40%):  Bao gồm quản lý sự kiện, đăng ký và báo cáo.
+Chất Lượng Mã (20%): Mã dễ đọc và có tính mô-đun với việc sử dụng đúng các nguyên tắc OOP.
+Tài Liệu (20%):  Sơ đồ luồng rõ ràng và mô tả các lớp/phương thức trong chương trình được giải thích tốt.
+Sáng Tạo và Tính Năng (20%):  Các tính năng bổ sung như thông báo tự động hoặc bộ lọc tìm kiếm.
+
+
+
+======================================================================================================================================
+
+Mô tả các lớp và phương thức - Campus Event Management System
+🏗️ Kiến trúc tổng quan
+Hệ thống được thiết kế theo mô hình Modular Architecture với việc tách biệt các chức năng thành các file/module riêng biệt, mỗi module đảm nhiệm một nhóm chức năng cụ thể.
+
+📁 models.py - Các lớp mô hình dữ liệu
+1. Lớp User (Base Class)
+Mục đích: Lớp cơ sở cho tất cả các loại người dùng
+class User:
+    def __init__(self, user_id, username, full_name, email, role)
+Thuộc tính:
+
+user_id: ID duy nhất của người dùng
+username: Tên đăng nhập
+full_name: Họ tên đầy đủ
+email: Địa chỉ email
+role: Vai trò trong hệ thống
+
+2. Lớp Admin (kế thừa User)
+Mục đích: Đại diện cho quản trị viên hệ thống
+
+Có quyền cao nhất: tạo, sửa, xóa sự kiện
+Xem tất cả báo cáo và thống kê
+
+3. Lớp EventOrganizer (kế thừa User)
+Mục đích: Đại diện cho người tổ chức sự kiện
+
+Quản lý sự kiện được phân công
+Xem danh sách người đăng ký
+Xuất báo cáo cho sự kiện của mình
+
+4. Lớp Student (kế thừa User)
+Mục đích: Đại diện cho sinh viên
+
+Xem và đăng ký sự kiện
+Tìm kiếm sự kiện
+
+5. Lớp Visitor (kế thừa User)
+Mục đích: Đại diện cho khách mời
+
+Tương tự Student nhưng là đối tượng từ bên ngoài
+
+6. Lớp Event
+Mục đích: Đại diện cho một sự kiện
+class Event:
+    def __init__(self, event_id, name, description, date, time, location, max_capacity, organizer_id)
+Thuộc tính:
+
+event_id: ID duy nhất của sự kiện
+name: Tên sự kiện
+description: Mô tả chi tiết
+date: Ngày tổ chức
+time: Giờ tổ chức
+location: Địa điểm
+max_capacity: Sức chứa tối đa
+organizer_id: ID người tổ chức
+attendees: Danh sách người tham dự
+
+Phương thức chính:
+
+_validate_inputs(): Kiểm tra tính hợp lệ của dữ liệu đầu vào
+add_attendee(user_id): Thêm người tham dự
+remove_attendee(user_id): Xóa người tham dự
+can_be_updated_by(): Kiểm tra quyền cập nhật
+can_be_deleted_by(): Kiểm tra quyền xóa
+update_field(): Cập nhật một trường cụ thể
+get_deletion_impact(): Phân tích tác động khi xóa
+prepare_for_deletion(): Chuẩn bị cho việc xóa
+
+
+📁 main.py - Lớp điều khiển chính
+Lớp SimpleCampusEventSystem
+Mục đích: Lớp chính điều khiển toàn bộ hệ thống
+Thuộc tính:
+
+users: Dictionary chứa tất cả người dùng
+events: Dictionary chứa tất cả sự kiện
+current_role: Vai trò hiện tại
+current_user: Người dùng hiện tại
+Các manager objects để quản lý chức năng
+
+Phương thức chính:
+
+__init__(): Khởi tạo hệ thống và các manager
+run(): Chạy vòng lặp chính của chương trình
+save_data(): Lưu dữ liệu ra file
+get_system_stats(): Lấy thống kê hệ thống
+validate_system_data(): Kiểm tra tính toàn vẹn dữ liệu
+
+
+📁 event_operations.py - Quản lý thao tác sự kiện
+Lớp EventOperations
+Mục đích: Xử lý tất cả các thao tác liên quan đến sự kiện
+Phương thức chính:
+Quản lý sự kiện:
+
+create_event(): Tạo sự kiện mới (chỉ Admin)
+
+Nhập thông tin sự kiện
+Validate dữ liệu
+Tạo Event object và lưu vào hệ thống
+
+
+update_event(): Cập nhật sự kiện (chỉ Admin)
+
+Hiển thị danh sách sự kiện
+Cho phép chọn sự kiện và field cần sửa
+Validate và cập nhật từng field
+
+
+delete_event(): Xóa sự kiện (chỉ Admin)
+
+Phân tích tác động trước khi xóa
+Multiple confirmation steps
+Hủy đăng ký cho tất cả người tham dự
+
+
+
+Phương thức hỗ trợ:
+
+_update_event_name(): Cập nhật tên sự kiện
+_update_event_description(): Cập nhật mô tả
+_update_event_date(): Cập nhật ngày
+_update_event_time(): Cập nhật giờ
+_update_event_location(): Cập nhật địa điểm
+_update_event_capacity(): Cập nhật sức chứa
+
+
+📁 registration_manager.py - Quản lý đăng ký
+Lớp RegistrationManager
+Mục đích: Xử lý tất cả các thao tác đăng ký sự kiện
+Phương thức chính:
+Cho Student/Visitor:
+
+register_for_event(): Đăng ký tham gia sự kiện
+
+Hiển thị sự kiện có thể đăng ký
+Kiểm tra sức chứa và trùng lặp
+Thực hiện đăng ký
+
+
+view_my_registrations(): Xem sự kiện đã đăng ký
+
+Hiển thị danh sách sự kiện đã tham gia
+Cho phép xem chi tiết
+
+
+
+Cho Organizer:
+
+manage_registrations(): Quản lý đăng ký cho sự kiện của mình
+
+Xem danh sách người đăng ký
+Xuất danh sách ra file
+Thống kê đăng ký
+
+
+
+Cho Admin:
+
+view_all_attendees(): Xem tất cả người tham dự
+
+Phương thức hỗ trợ:
+
+_display_events_table(): Hiển thị bảng sự kiện
+_show_event_details(): Hiển thị chi tiết sự kiện
+_show_detailed_attendee_list(): Danh sách chi tiết người tham dự
+_export_attendee_list(): Xuất danh sách ra CSV
+_show_registration_statistics(): Thống kê đăng ký
+
+
+📁 menu_manager.py - Quản lý giao diện
+Lớp MenuManager
+Mục đích: Quản lý tất cả các menu và giao diện người dùng
+Phương thức chính:
+Chọn vai trò:
+
+select_role(): Chọn vai trò sử dụng hệ thống
+select_organizer(): Chọn organizer cụ thể
+select_student(): Chọn student cụ thể
+select_visitor(): Chọn visitor cụ thể
+
+Menu chính:
+
+admin_menu(): Menu cho Admin
+
+Tạo, cập nhật, xóa sự kiện
+Xem báo cáo và thống kê
+
+
+organizer_menu(): Menu cho Event Organizer
+
+Xem sự kiện của mình
+Quản lý đăng ký
+
+
+student_visitor_menu(): Menu cho Student/Visitor
+
+Xem và đăng ký sự kiện
+Tìm kiếm sự kiện
+
+
+
+Thông tin hệ thống:
+
+show_system_info(): Hiển thị thông tin tổng quan
+show_help_menu(): Menu trợ giúp
+
+
+📁 view_manager.py - Quản lý hiển thị
+Lớp ViewManager
+Mục đích: Xử lý tất cả việc hiển thị dữ liệu
+Phương thức chính:
+Hiển thị sự kiện:
+
+view_all_events(): Xem tất cả sự kiện
+view_my_events(): Xem sự kiện của organizer
+display_events_table(): Hiển thị bảng sự kiện
+show_event_details(): Chi tiết sự kiện
+show_events_summary(): Tóm tắt sự kiện
+
+Hiển thị theo tiêu chí:
+
+show_events_by_date_range(): Sự kiện theo khoảng thời gian
+show_events_by_location(): Sự kiện theo địa điểm
+show_events_by_organizer(): Sự kiện theo organizer
+display_events_calendar_view(): Hiển thị dạng lịch
+
+Hiển thị cho người dùng:
+
+show_available_events_for_registration(): Sự kiện có thể đăng ký
+show_my_registered_events(): Sự kiện đã đăng ký
+show_events_statistics_summary(): Tóm tắt thống kê
+
+Phương thức hỗ trợ:
+
+_show_attendees_list(): Danh sách người tham dự
+display_compact_events_list(): Hiển thị dạng compact
+
+
+📁 search_manager.py - Quản lý tìm kiếm
+Lớp SearchManager
+Mục đích: Xử lý tất cả các chức năng tìm kiếm và lọc
+Phương thức chính:
+Tìm kiếm cơ bản:
+
+search_events(): Menu tìm kiếm chính
+search_by_name(): Tìm theo tên sự kiện
+search_by_location(): Tìm theo địa điểm
+search_by_date(): Tìm theo ngày
+search_by_organizer(): Tìm theo người tổ chức
+
+Tìm kiếm nâng cao:
+
+filter_by_registration_status(): Lọc theo tình trạng đăng ký
+advanced_search(): Tìm kiếm với nhiều tiêu chí
+_apply_advanced_criteria(): Áp dụng tiêu chí tìm kiếm
+_build_criteria_description(): Tạo mô tả tiêu chí
+
+Xử lý kết quả:
+
+_display_search_results(): Hiển thị kết quả tìm kiếm
+_view_search_result_details(): Xem chi tiết từ kết quả
+_register_from_search_results(): Đăng ký từ kết quả tìm kiếm
+_export_search_results(): Xuất kết quả ra file
+
+
+📁 statistics_manager.py - Quản lý thống kê
+Lớp StatisticsManager
+Mục đích: Xử lý tất cả báo cáo và thống kê
+Phương thức chính:
+Thống kê tổng quan:
+
+show_statistics(): Thống kê tổng quan hệ thống (Admin)
+show_my_event_statistics(): Thống kê cá nhân (Organizer)
+
+Thống kê chi tiết:
+
+_show_role_statistics(): Thống kê theo vai trò
+_show_organizer_statistics(): Thống kê theo organizer
+_show_event_status_statistics(): Thống kê trạng thái sự kiện
+
+Xuất báo cáo:
+
+_show_export_menu(): Menu xuất báo cáo
+_export_excel_report(): Xuất báo cáo Excel (UTF-8 with BOM)
+_export_wps_report(): Xuất báo cáo WPS (UTF-8 thuần)
+_export_full_report(): Xuất báo cáo đầy đủ
+_export_detailed_attendee_report(): Báo cáo chi tiết người tham dự
+_export_personal_report(): Báo cáo cá nhân cho organizer
+
+
+📁 file_manager.py - Quản lý file
+Lớp FileManager
+Mục đích: Xử lý tất cả thao tác với file
+Phương thức chính:
+
+save_events_to_csv(): Lưu sự kiện ra CSV
+save_users_to_csv(): Lưu người dùng ra CSV
+export_statistics_csv(): Xuất thống kê ra CSV
+save_all_data(): Lưu tất cả dữ liệu
+
+Đặc điểm:
+
+Hỗ trợ encoding UTF-8 với BOM cho Excel
+Hỗ trợ UTF-8 thuần cho WPS Office
+Tự động tạo timestamp trong tên file
+
+
+📁 sample_data.py - Dữ liệu mẫu
+Các hàm khởi tạo dữ liệu:
+
+generate_id(): Tạo ID duy nhất
+create_sample_users(): Tạo người dùng mẫu
+create_4_sample_events(): Tạo 4 sự kiện mẫu
+create_sample_registrations(): Tạo đăng ký mẫu
+initialize_sample_data(): Khởi tạo toàn bộ dữ liệu mẫu
+
+Dữ liệu mẫu bao gồm:
+
+1 Admin
+3 Event Organizers
+3 Students
+2 Visitors
+4 sự kiện có sẵn với đăng ký mẫu
+
+
+🔄 Luồng hoạt động chính
+1. Khởi tạo hệ thống:
+main.py → SimpleCampusEventSystem.__init__() 
+→ Khởi tạo tất cả managers 
+→ sample_data.initialize_sample_data()
+2. Chọn vai trò:
+MenuManager.select_role() 
+→ Thiết lập current_role và current_user
+→ Chuyển đến menu tương ứng
+3. Thực hiện chức năng:
+Menu tương ứng → Manager tương ứng → Thực hiện thao tác 
+→ Cập nhật dữ liệu → Lưu dữ liệu (nếu cần)
+4. Validation và Error Handling:
+
+Mỗi thao tác đều có validation nghiêm ngặt
+Error handling với try-catch
+Confirmation cho các thao tác quan trọng
+
+
+🚀 Đặc điểm nổi bật
+1. Modular Architecture:
+
+Mỗi file đảm nhiệm một nhóm chức năng cụ thể
+Dễ bảo trì và mở rộng
+Tách biệt logic và presentation
+
+2. Role-based Access Control:
+
+Phân quyền rõ ràng cho từng vai trò
+Kiểm tra quyền hạn ở mọi thao tác
+
+3. Comprehensive Validation:
+
+Validate dữ liệu đầu vào nghiêm ngặt
+Kiểm tra business rules
+Error handling toàn diện
+
+4. User-friendly Interface:
+
+Menu trực quan, dễ sử dụng
+Thông báo rõ ràng
+Confirmation cho thao tác quan trọng
+
+5. Advanced Features:
+
+Tìm kiếm nâng cao với nhiều tiêu chí
+Báo cáo thống kê chi tiết
+Xuất file CSV với multiple encoding
+Impact analysis trước khi xóa
+

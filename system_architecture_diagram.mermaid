@@ -1,0 +1,87 @@
+graph TB
+    subgraph "🎯 CAMPUS EVENT MANAGEMENT SYSTEM"
+        subgraph "🏗️ MAIN SYSTEM"
+            Main[main.py<br/>🚀 Entry Point<br/>System Controller]
+            System[SimpleCampusEventSystem<br/>📊 Core System Class<br/>Data Management]
+        end
+        
+        subgraph "📋 DATA MODELS"
+            User[User<br/>👤 Base User Class]
+            Admin[Admin<br/>👑 Administrator]
+            Organizer[EventOrganizer<br/>🎯 Event Manager]
+            Student[Student<br/>🎓 Student User]
+            Visitor[Visitor<br/>👤 Guest User]
+            Event[Event<br/>📅 Event Entity<br/>Validation & Management]
+        end
+        
+        subgraph "⚙️ OPERATION MANAGERS"
+            EventOps[EventOperations<br/>➕ Create Events<br/>✏️ Update Events<br/>🗑️ Delete Events]
+            RegMgr[RegistrationManager<br/>📝 Handle Registrations<br/>👥 Attendee Management<br/>📤 Export Functions]
+            ViewMgr[ViewManager<br/>👁️ Display Events<br/>📋 List Management<br/>📅 Calendar View]
+            StatsMgr[StatisticsManager<br/>📊 Generate Reports<br/>📈 Analytics<br/>📄 Export CSV]
+            SearchMgr[SearchManager<br/>🔍 Search Events<br/>🎯 Filter Results<br/>📋 Advanced Search]
+            MenuMgr[MenuManager<br/>🎭 Role Selection<br/>📋 Menu Navigation<br/>🔗 User Interface]
+        end
+        
+        subgraph "💾 DATA MANAGEMENT"
+            FileMgr[FileManager<br/>💾 CSV Operations<br/>📤 Export Functions<br/>🔄 Data Persistence]
+            SampleData[SampleData<br/>🎲 Initial Data<br/>👥 Sample Users<br/>📅 Sample Events]
+        end
+        
+        subgraph "💿 DATA STORAGE"
+            CSV1[(users.csv<br/>👥 User Data)]
+            CSV2[(events.csv<br/>📅 Event Data)]
+            Report1[(statistics_report.csv<br/>📊 Reports)]
+            Report2[(attendee_lists.csv<br/>👥 Attendee Data)]
+        end
+    end
+    
+    %% Main System Connections
+    Main --> System
+    System --> EventOps
+    System --> RegMgr
+    System --> ViewMgr
+    System --> StatsMgr
+    System --> SearchMgr
+    System --> MenuMgr
+    System --> FileMgr
+    System --> SampleData
+    
+    %% Data Model Inheritance
+    User --> Admin
+    User --> Organizer
+    User --> Student
+    User --> Visitor
+    
+    %% Manager Dependencies
+    EventOps --> Event
+    RegMgr --> Event
+    RegMgr --> User
+    ViewMgr --> Event
+    StatsMgr --> Event
+    StatsMgr --> FileMgr
+    SearchMgr --> Event
+    MenuMgr --> System
+    
+    %% File Operations
+    FileMgr --> CSV1
+    FileMgr --> CSV2
+    FileMgr --> Report1
+    FileMgr --> Report2
+    
+    %% Data Flow
+    SampleData --> User
+    SampleData --> Event
+    
+    %% Styling
+    classDef mainClass fill:#e17055,stroke:#d63031,stroke-width:3px,color:#fff
+    classDef modelClass fill:#6c5ce7,stroke:#5f3dc4,stroke-width:2px,color:#fff
+    classDef managerClass fill:#00b894,stroke:#00a085,stroke-width:2px,color:#fff
+    classDef dataClass fill:#0984e3,stroke:#0770cd,stroke-width:2px,color:#fff
+    classDef storageClass fill:#fdcb6e,stroke:#e17055,stroke-width:2px,color:#000
+    
+    class Main,System mainClass
+    class User,Admin,Organizer,Student,Visitor,Event modelClass
+    class EventOps,RegMgr,ViewMgr,StatsMgr,SearchMgr,MenuMgr managerClass
+    class FileMgr,SampleData dataClass
+    class CSV1,CSV2,Report1,Report2 storageClass
